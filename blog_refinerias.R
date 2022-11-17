@@ -12,42 +12,6 @@ library (readxl)
 # library (flextable)
 # library (modeest)
 
-# Datos INEGI
-# setwd("C:/Users/mckfm/Downloads/")
-# inegi_pob_raw <- read_excel("ei_00.xlsx")
-# 
-# pob_municipios <- inegi_pob_raw %>% 
-#   select(cve_entidad, desc_entidad,
-#          cve_municipio, desc_municipio,
-#          indicador, `2000.00`, `2005.00`,
-#          `2010.00`) %>% 
-#   mutate(`2000.00` = as.numeric(`2000.00`)) %>%
-#   mutate(`2005.00` = as.numeric(`2005.00`)) %>%
-#   mutate(`2010.00` = as.numeric(`2010.00`)) %>%
-#   mutate(indicador_x = ifelse(indicador %in% c("Población total"),1,0)) %>%
-#   mutate(desc_municipio_x = ifelse(desc_municipio %in% c("Salamanca",
-#                                                          "Tula de Allende",
-#                                                          "Cadereyta Jiménez",
-#                                                          "Salina Cruz",
-#                                                          "Ciudad Madero",
-#                                                          "Minatitlán"),1,0)) %>%
-#   filter(indicador_x == 1) %>% 
-#   filter(desc_municipio_x == 1) %>% 
-#   filter(desc_entidad != "Colima") %>% 
-#   select(-indicador_x, -desc_municipio_x) %>% 
-#   pivot_longer(`2000.00`:`2010.00`,
-#                names_to = "año",
-#                values_to = "pob_tot") %>% 
-#   mutate(año = case_when(
-#     año == "2000.00" ~ 2000,
-#     año == "2005.00" ~ 2005,
-#     año == "2010.00" ~ 2010
-#   )) %>% 
-#   rename(municipio = desc_municipio)
-# 
-# write.csv(pob_municipios, "pob_municipios_raw.csv") 
-# Falta la población para 2015 y 2020
-
 # Población de los seis municipios
 setwd("C:/Users/mckfm/Documents/Inputs/Inputs")
 pob_mun <- read_excel("pob_municipios_raw.xlsx")
@@ -91,7 +55,7 @@ base_final <- def_mun_sex %>%
   mutate(casos_mun_10mil = (total/pob_tot)*10000) %>% 
   inner_join(def_nac_sex_bn, by = c("año", "sexo", "tipo"))
 
-## Ahora sí, a graficar!
+## Ahora sí, ¡a graficar!
 base_final %>% 
   filter(sexo == "Total") %>% 
   ggplot(aes(x = año))+
@@ -142,10 +106,4 @@ base_final %>%
        colour = "Nivel",
        caption = "Elaboración: Bernardo Luis Mc Kelligan y Emilio del Río Castro
        Datos: Censos y encuestas INEGI de población y mortalidad (2000-2020)")
-
-# base_final %>% 
-#   filter(tipo == "Tumores (neoplasias) (C00-D48)" & 
-#            municipio == "Salamanca")
-
-
 
